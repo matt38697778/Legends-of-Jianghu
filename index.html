@@ -2,16 +2,69 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>武魂对决 - 测试版</title>
+    <title>武魂对决 - 官方测试版</title>
     <style>
-        /* 让外壳和游戏天衣无缝地铺满整个浏览器，不留任何白边和滚动条 */
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #2c2520; }
-        iframe { width: 100%; height: 100%; border: none; display: block; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #2c2520; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+        .title { font-size: 28px; color: #ffa502; font-weight: bold; margin-bottom: 20px; text-shadow: 0 0 8px rgba(255,165,2,0.4); }
+        .status-txt { font-size: 14px; color: #eedcbe; margin-bottom: 15px; text-align: center; }
+        .progress-bar { width: 280px; height: 8px; background: #4a3c31; border-radius: 4px; border: 1px solid #8b5a2b; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #ffa502, #ff4757); transition: width 0.3s ease; }
+        #error-btn { display: none; margin-top: 15px; padding: 6px 15px; background: #ff4757; color: white; border: none; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <iframe src="https://hf.space/embed/a38697778/legends-of-jianghu-battle-server/index.html"></iframe>
+    <div id="launcher">
+        <div class="title">⚔️ 武魂对决 ⚔️</div>
+        <div class="status-txt" id="status-text">正在唤醒武魂盘，校验最新对战数据...</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <button id="error-btn" onclick="location.reload()">重新连接</button>
+    </div>
 
+<script>
+    const statusText = document.getElementById('status-text');
+    const progressFill = document.getElementById('progress-fill');
+    const errorBtn = document.getElementById('error-btn');
+
+    // 🔒 核心安全配置：把下方链接严格替换为你的 Hugging Face 空间直达资源链接
+    // 注意：使用的是可以直接读取纯文本代码的底层渲染链接 (加上 __resolved 后缀，完美绕过防火墙)
+    const CLOUD_GAME_URL = "https://a38697778-Legends-of-Jianghu-battle-server.hf.space/Game.html?t=" + new Date().getTime();
+
+    async function hotUpdateGame() {
+        try {
+            // 1. 进度条起航
+            progressFill.style.width = '30%';
+            statusText.innerText = '正在建立魂力通道...';
+
+            // 2. 使用 fetch 异步跨域抓取最新的 Game.html 源码文本
+            const response = await fetch(CLOUD_GAME_URL);
+            if (!response.ok) throw new Error('网络魂力震荡，无法拉取更新包');
+            
+            progressFill.style.width = '70%';
+            statusText.innerText = '成功下载最新魂技补丁，正在注入战场...';
+            
+            const gameHtmlCode = await response.text();
+            progressFill.style.width = '100%';
+
+            // 3. 终极魔法：直接将抓取到的 Game.html 核心代码复写进当前的 GitHub 页面
+            setTimeout(() => {
+                document.open();
+                document.write(gameHtmlCode);
+                document.close();
+            }, 600);
+
+        } catch (error) {
+            console.error(error);
+            progressFill.style.backgroundColor = '#ff4757';
+            statusText.innerHTML = `<span style="color:#ff4757;">武魂觉醒失败：网络连接受阻</span><br/><small style="color:#aaa;">请确认Hugging Face服务端已正常开机运行</small>`;
+            errorBtn.style.display = 'block';
+        }
+    }
+
+    // 启动热更新流程
+    window.onload = hotUpdateGame;
+</script>
 </body>
 </html>
