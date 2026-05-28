@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "https://a38697778-Legends-of-Jianghu-battle-server.hf.space/$1" }
+    {
+      "source": "/(.*)",
+      "destination": "https://a38697778-Legends-of-Jianghu-battle-server.hf.space/$1"
+    }
   ]
 }
